@@ -11,7 +11,15 @@
     </Window.Background>
     <Grid>
         <Grid Background="#99818181">
-            <DataGrid x:Name="Orders" Margin="0" Background="{x:Null}" FontSize="16" IsTextSearchEnabled="True" IsReadOnly="True" MouseDoubleClick="Orders_MouseDoubleClick"/>
+            <DataGrid x:Name="Orders" ColumnWidth="*" Margin="0" Background="{x:Null}" FontSize="16" IsTextSearchEnabled="True" IsReadOnly="True" MouseDoubleClick="Orders_MouseDoubleClick" SelectionMode="Single" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Path=Код}" IsReadOnly="True" Width="70"/>
+                    <DataGridTextColumn Header="Фио" Binding="{Binding Path=ФИО_клиента}"/>
+                    <DataGridTextColumn Header="Телефон" Binding="{Binding Path=Номер_телефона}"/>
+                    <DataGridTextColumn Header="Дата" Binding="{Binding Path=Дата_заказа}" Width="200"/>
+                    <DataGridCheckBoxColumn Header="Оплата" Binding="{Binding Path=Подтверждение_оплаты}" Width="62"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Grid>
     </Window>

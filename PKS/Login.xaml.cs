@@ -24,7 +24,7 @@ namespace PKS
             }
             IP.TextChanged += IP_TextChanged;
         }
-        public MySqlConnection GetLoginString() { ShowDialog(); return conn; }
+        public MySqlConnection GetLoginString(ref string StufID) { ShowDialog(); StufID = login.Text; return conn; }
         private void Close_Click(object sender, RoutedEventArgs e) => ExitLogin();
         private void IP_PreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled = !IPchar.Contains(e.Text[0]);
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e) { if (e.Key == Key.Enter) ExitLogin(); }
@@ -46,7 +46,7 @@ namespace PKS
                 IPLog.Visibility = Visibility.Visible;
                 return;
             }
-            File.WriteAllBytes("Login", MyAes.ToAes256(IP.Text + "\n" + login.Text + "\n" + Password.Password));
+            File.WriteAllBytes("Login", MyAes.ToAes256($"{IP.Text}\n{login.Text}\n{Password.Password}"));
             try { (conn = new MySqlConnection($"Server={IP.Text};Database=basa;port=3306;User Id={login.Text};password={Password.Password}")).Open(); }
             catch
             {

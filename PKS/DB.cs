@@ -1,20 +1,35 @@
 ﻿using MySqlConnector;
-using System.Collections.Generic;
 using System.Data;
 namespace PKS
 {
-    class DB
+    public class DB
     {
-        public DB() => conn = new Login().GetLoginString();
-        public DataView GetTable(string Table)
+        string StuffID;
+        public DB() => conn = new Login().GetLoginString(ref StuffID);
+        public DataView GetTable()
         {
-            MySqlCommand cmd = new ($"SELECT * FROM {Table}", conn);
+            MySqlCommand cmd = new ($"SELECT Код, ФИО_клиента, Номер_телефона, Дата_заказа, Подтверждение_оплаты  FROM Заказ WHERE Сотрудник={StuffID}", conn);
             cmd.ExecuteNonQuery();
-            DataTable dataTable = new (Table);
+            DataTable dataTable = new ("Заказ");
             new MySqlDataAdapter(cmd).Fill(dataTable);
             return dataTable.DefaultView;
         }
-        public void Req(string req) => new MySqlCommand(req, conn).ExecuteNonQuery();
+        public string Req(string req, string Startinfo)
+        {
+            try
+            {
+                Startinfo += "\n";
+                MySqlCommand cmd = new(req, conn);
+                cmd.ExecuteNonQuery();
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    for (int i = 0; i < reader.FieldCount; i++)
+                        Startinfo += $"   {reader.GetName(i)}: {reader[i]}.\n";
+                reader.Close();
+            }
+            catch (System.Exception) { }
+            return Startinfo;
+        }
         public MySqlConnection conn;
     }
 }
