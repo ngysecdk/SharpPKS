@@ -1,4 +1,5 @@
 ﻿using MySqlConnector;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -48,12 +49,25 @@ namespace PKS
             }
             File.WriteAllBytes("Login", MyAes.ToAes256($"{IP.Text}\n{login.Text}\n{Password.Password}"));
             try { (conn = new MySqlConnection($"Server={IP.Text};Database=basa;port=3306;User Id={login.Text};password={Password.Password}")).Open(); }
-            catch
+            catch (Exception ex)
             {
-                Password.Foreground = login.Foreground = Brushes.Red;
+                if (ex.Message.Contains("Access denied")) Password.Foreground = login.Foreground = Brushes.Red;
+                else
+                {
+                    IPLog.Text = ex.Message;
+                    IPLog.Visibility = Visibility.Visible;
+                }
                 return;
             }
+            conn.StateChange += Conn_StateChange; ;
             Close();
+        }
+        private void Conn_StateChange(object sender, System.Data.StateChangeEventArgs e)
+        {
+            if (Application.Current == null || e.CurrentState != System.Data.ConnectionState.Closed) return;
+            MessageBox.Show("Соединение разорвано. Попробуйте продолжить работу позже.", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Environment.Exit(-1);
         }
         IPAddress address;
         private MySqlConnection conn;
