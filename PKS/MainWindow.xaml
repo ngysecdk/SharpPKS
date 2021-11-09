@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PKS"
         mc:Ignorable="d"
-    Title="Программный комплекс Сотрудника" Height="768" Width="1024" WindowState="Maximized" WindowStartupLocation="CenterScreen" MinWidth="1024" MinHeight="768">
+    Title="Программный комплекс Сотрудника" Height="768" Width="1024" WindowState="Maximized" WindowStartupLocation="CenterScreen" MinWidth="1024" MinHeight="768" Icon="/icon.ico">
     <Window.Background>
         <ImageBrush ImageSource="/LoginBack.png"/>
     </Window.Background>
